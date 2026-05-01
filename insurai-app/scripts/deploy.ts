@@ -44,6 +44,12 @@ async function main() {
   console.log(`🔐 TEE Signer:       ${TEE_SIGNER}`);
   console.log("─".repeat(60));
 
+  const PolicyINFT = await ethers.getContractFactory("PolicyINFT");
+  const inft = await PolicyINFT.deploy(deployer.address);
+  await inft.waitForDeployment();
+  const policyINFTAddress = await inft.getAddress();
+  console.log(`🪪 PolicyINFT:       ${policyINFTAddress}`);
+
   // Save deployment info
   const deploymentInfo = {
     contractAddress,
@@ -54,6 +60,7 @@ async function main() {
     rpcUrl: "https://evmrpc-testnet.0g.ai",
     explorerUrl: `https://chainscan-galileo.0g.ai/address/${contractAddress}`,
     deployTxHash: contract.deploymentTransaction()?.hash,
+    policyINFTAddress,
     deployedAt: new Date().toISOString(),
   };
 
@@ -70,6 +77,7 @@ async function main() {
 
   console.log("\n🎉 Deployment complete! Add to .env.local:");
   console.log(`NEXT_PUBLIC_CONTRACT_ADDRESS=${contractAddress}`);
+  console.log(`NEXT_PUBLIC_POLICY_INFT_ADDRESS=${policyINFTAddress}`);
   console.log(`NEXT_PUBLIC_CHAIN_ID=16602`);
 }
 

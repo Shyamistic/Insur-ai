@@ -73,6 +73,25 @@ export default function BuyPolicy({ onSuccess }: Props) {
         contractAddress: CONTRACT_ADDRESS,
         details: fieldValues,
       } as Policy);
+
+      // Server-side encrypted metadata upload + iNFT mint (stub-safe).
+      fetch("/api/policies/mint", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          to: address,
+          metadata: {
+            product: selectedProduct?.name,
+            coverage: selectedPremiumOpt?.coverage,
+            premium: selectedPremiumOpt?.premium,
+            details: fieldValues,
+            policyTx: hash,
+            mintedAt: new Date().toISOString(),
+          },
+        }),
+      }).catch(() => {
+        // Non-blocking for MVP UX.
+      });
     }
   }, [isConfirmed, hash]);
 

@@ -112,10 +112,8 @@ export function generateCid(): string {
 
 export function generateTeeSig(): string {
   const chars = "0123456789abcdef";
-  let sig = "3045022100";
-  for (let i = 0; i < 56; i++) sig += chars[Math.floor(Math.random() * 16)];
-  sig += "0220";
-  for (let i = 0; i < 56; i++) sig += chars[Math.floor(Math.random() * 16)];
+  let sig = "0x";
+  for (let i = 0; i < 130; i++) sig += chars[Math.floor(Math.random() * 16)];
   return sig;
 }
 

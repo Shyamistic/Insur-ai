@@ -9,8 +9,8 @@ import {
   ProcessingStep,
   sleep,
 } from "@/lib/data";
-import { useAccount, useWriteContract, useWaitForTransactionReceipt, useSignMessage } from "wagmi";
-import { parseEther, keccak256, encodePacked, hashMessage, recoverAddress } from "viem";
+import { useAccount, useWriteContract } from "wagmi";
+import { parseEther, keccak256, toHex } from "viem";
 import { CONTRACT_ADDRESS, INSURANCE_ABI } from "@/lib/contract";
 
 interface Props {
@@ -132,7 +132,8 @@ export default function SubmitClaim({ onSuccess }: Props) {
           mockClaimId, // In real app, get from logs
           approved,
           payoutAmount,
-          sig as `0x${string}`
+          sig as `0x${string}`,
+          keccak256(toHex(`stub-attestation:${cid}`)),
         ],
       });
       

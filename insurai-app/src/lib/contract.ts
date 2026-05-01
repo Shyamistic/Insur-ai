@@ -65,6 +65,7 @@ export const INSURANCE_ABI = [
       { name: "approved", type: "bool" },
       { name: "payoutAmount", type: "uint256" },
       { name: "teeSignature", type: "bytes" },
+      { name: "attestationHash", type: "bytes32" },
     ],
     outputs: [],
   },
@@ -117,6 +118,7 @@ export const INSURANCE_ABI = [
           { name: "settledAt", type: "uint256" },
           { name: "payout", type: "uint256" },
           { name: "teeSignature", type: "bytes" },
+          { name: "attestationHash", type: "bytes32" },
         ],
       },
     ],
@@ -202,6 +204,7 @@ export const INSURANCE_ABI = [
       { name: "holder", type: "address", indexed: true },
       { name: "payout", type: "uint256", indexed: false },
       { name: "teeSignature", type: "bytes", indexed: false },
+      { name: "attestationHash", type: "bytes32", indexed: false },
     ],
   },
   {

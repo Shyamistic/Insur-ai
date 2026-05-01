@@ -6,26 +6,36 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "sensor:consumer": "tsx services/sensor-consumer.ts",
+    "eliza:agent": "tsx agents/insurance-eliza/src/index.ts"
   },
   "dependencies": {
+    "@0glabs/0g-serving-broker": "^0.7.1",
+    "@openzeppelin/contracts": "^5.4.0",
     "@rainbow-me/rainbowkit": "^2.2.10",
     "@tanstack/react-query": "^5.100.5",
+    "cors": "^2.8.5",
+    "ethers": "^6.15.0",
+    "express": "^5.1.0",
     "next": "16.2.4",
     "react": "19.2.4",
     "react-dom": "19.2.4",
     "viem": "^2.48.4",
-    "wagmi": "^3.6.5"
+    "wagmi": "^2.19.5"
   },
   "devDependencies": {
     "@nomicfoundation/hardhat-toolbox": "^7.0.0",
     "@types/node": "^20",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.3",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "dotenv": "^17.4.2",
     "eslint": "^9",
     "eslint-config-next": "16.2.4",
     "hardhat": "^3.4.1",
+    "tsx": "^4.20.3",
     "typescript": "^5"
   }
 }

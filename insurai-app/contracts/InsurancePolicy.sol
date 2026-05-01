@@ -36,6 +36,7 @@ contract InsurancePolicy {
         uint256 settledAt;
         uint256 payout;
         bytes teeSignature;   // ECDSA signature from 0G Compute TEE enclave
+        bytes32 attestationHash; // Hash of offchain TEE attestation payload
     }
 
     // ─── State ────────────────────────────────────────────────────────────────
@@ -78,7 +79,8 @@ contract InsurancePolicy {
         uint256 indexed policyId,
         address indexed holder,
         uint256 payout,
-        bytes teeSignature
+        bytes teeSignature,
+        bytes32 attestationHash
     );
 
     event ClaimRejected(
@@ -195,7 +197,8 @@ contract InsurancePolicy {
             submittedAt: block.timestamp,
             settledAt: 0,
             payout: 0,
-            teeSignature: ""
+            teeSignature: "",
+            attestationHash: bytes32(0)
         });
 
         holderClaims[msg.sender].push(claimId);
@@ -217,7 +220,8 @@ contract InsurancePolicy {
         uint256 claimId,
         bool approved,
         uint256 payoutAmount,
-        bytes calldata teeSignature
+        bytes calldata teeSignature,
+        bytes32 attestationHash
     ) external claimExists(claimId) {
         Claim storage claim = claims[claimId];
         require(claim.status == ClaimStatus.Pending, "InsurAI: Claim not pending");
@@ -247,6 +251,7 @@ contract InsurancePolicy {
 
         claim.settledAt = block.timestamp;
         claim.teeSignature = teeSignature;
+        claim.attestationHash = attestationHash;
         policyActiveClaim[claim.policyId] = 0;
 
         if (approved) {
@@ -260,7 +265,7 @@ contract InsurancePolicy {
             (bool sent,) = claim.holder.call{value: payoutAmount}("");
             require(sent, "InsurAI: Payout transfer failed");
 
-            emit ClaimApproved(claimId, claim.policyId, claim.holder, payoutAmount, teeSignature);
+            emit ClaimApproved(claimId, claim.policyId, claim.holder, payoutAmount, teeSignature, attestationHash);
         } else {
             claim.status = ClaimStatus.Rejected;
             emit ClaimRejected(claimId, claim.policyId, "AI model rejected claim");
