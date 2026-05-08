@@ -1,0 +1,18 @@
+{
+  "framework": "nextjs",
+  "buildCommand": "npm run build",
+  "devCommand": "npm run dev",
+  "installCommand": "npm install --legacy-peer-deps",
+  "regions": ["sin1"],
+  "env": {
+    "NEXT_PUBLIC_CHAIN_ID": "16602",
+    "NEXT_PUBLIC_IS_MAINNET": "false",
+    "NEXT_PUBLIC_0G_RPC": "https://evmrpc-testnet.0g.ai",
+    "NEXT_PUBLIC_CONTRACT_ADDRESS": "0xb3D949Ac25AABEbf628f8f8AD630214079cA8e95",
+    "NEXT_PUBLIC_POLICY_INFT_ADDRESS": "0xE06c6a8128fa0a90A1c8A9d2B0F442DD602ec79C",
+    "OG_PRIVATE_COMPUTER_URL": "https://router-api.testnet.0g.ai/v1",
+    "OG_COMPUTE_MODEL": "deepseek-chat-v3-0324",
+    "OG_STORAGE_INDEXER_URL": "https://indexer-storage-testnet-turbo.0g.ai",
+    "NEXT_PUBLIC_APP_URL": "https://insurai.vercel.app"
+  }
+}

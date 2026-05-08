@@ -4,13 +4,20 @@ pragma solidity ^0.8.20;
 /**
  * @title InsurAI — Parametric Insurance on 0G Chain
  * @notice Trustless parametric insurance with AI-verified claims via 0G Compute TEE
- * @dev Deployed on 0G Galileo Testnet (Chain ID: 16602)
+ * @dev Deployed on 0G Galileo Testnet (Chain ID: 16602) and 0G Mainnet (Chain ID: 16661)
  *      TEE enclave address signs claim approvals using ECDSA
+ *      Supports 5 policy types: FlightDelay, GadgetWarranty, EventCancellation, TravelMedical, CryptoPortfolioShield
  */
 contract InsurancePolicy {
     // ─── Types ────────────────────────────────────────────────────────────────
 
-    enum PolicyType { FlightDelay, GadgetWarranty, EventCancellation, TravelMedical }
+    enum PolicyType {
+        FlightDelay,           // 0
+        GadgetWarranty,        // 1
+        EventCancellation,     // 2
+        TravelMedical,         // 3
+        CryptoPortfolioShield  // 4 — DeFi coverage against smart contract exploits
+    }
     enum ClaimStatus { None, Pending, Approved, Rejected, Paid }
 
     struct Policy {

@@ -1,6 +1,19 @@
 // Simulated 0G blockchain state and helpers
 
-export type PolicyType = "flight_delay" | "gadget_warranty" | "event_cancellation" | "travel_medical";
+export type PolicyType =
+  | "flight_delay"
+  | "gadget_warranty"
+  | "event_cancellation"
+  | "travel_medical"
+  | "crypto_portfolio_shield";
+
+export const POLICY_TYPE_MAP: Record<number, PolicyType> = {
+  0: "flight_delay",
+  1: "gadget_warranty",
+  2: "event_cancellation",
+  3: "travel_medical",
+  4: "crypto_portfolio_shield",
+};
 
 export interface Policy {
   id: string;
@@ -93,6 +106,19 @@ export const POLICY_PRODUCTS = [
     ],
     color: "amber",
     fields: ["Destination Country", "Travel Start Date", "Return Date", "Pre-existing Conditions"],
+  },
+  {
+    type: "crypto_portfolio_shield" as PolicyType,
+    name: "Crypto Portfolio Shield",
+    icon: "🛡️",
+    description: "DeFi coverage against smart contract exploits, protocol failures, and rug pulls",
+    premiums: [
+      { coverage: 5000, premium: 50, label: "$5,000 (Basic)" },
+      { coverage: 25000, premium: 120, label: "$25,000 (Standard)" },
+      { coverage: 100000, premium: 300, label: "$100,000 (Pro)" },
+    ],
+    color: "rose",
+    fields: ["Wallet Address", "Protocol Name", "TVL Amount", "Coverage Start Date"],
   },
 ];
 

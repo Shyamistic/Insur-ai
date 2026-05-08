@@ -9,26 +9,98 @@ export const og_galileo = {
   },
   blockExplorers: {
     default: {
-      name: "0G Chainscan",
+      name: "0G Chainscan Galileo",
       url: "https://chainscan-galileo.0g.ai",
     },
   },
   testnet: true,
 } as const;
 
+// ─── 0G Mainnet Chain Definition ──────────────────────────────────────────────
+export const og_mainnet = {
+  id: 16661,
+  name: "0G-Mainnet",
+  nativeCurrency: { name: "0G", symbol: "0G", decimals: 18 },
+  rpcUrls: {
+    default: { http: ["https://evmrpc.0g.ai"] },
+    public: { http: ["https://evmrpc.0g.ai"] },
+  },
+  blockExplorers: {
+    default: {
+      name: "0G Chainscan",
+      url: "https://chainscan.0g.ai",
+    },
+  },
+  testnet: false,
+} as const;
+
+// ─── Active Chain (based on env) ──────────────────────────────────────────────
+const IS_MAINNET = process.env.NEXT_PUBLIC_IS_MAINNET === "true";
+export const activeChain = IS_MAINNET ? og_mainnet : og_galileo;
+
 // ─── Contract Configuration ───────────────────────────────────────────────────
-// This is populated after deployment via scripts/deploy.ts
-// Update NEXT_PUBLIC_CONTRACT_ADDRESS in .env.local after deploying
 export const CONTRACT_ADDRESS =
   (process.env.NEXT_PUBLIC_CONTRACT_ADDRESS as `0x${string}`) ||
   "0x0000000000000000000000000000000000000000";
 
-export const EXPLORER_BASE = "https://chainscan-galileo.0g.ai";
-export const STORAGE_SCAN_BASE = "https://storagescan-galileo.0g.ai";
+export const POLICY_INFT_ADDRESS =
+  (process.env.NEXT_PUBLIC_POLICY_INFT_ADDRESS as `0x${string}`) ||
+  "0x0000000000000000000000000000000000000000";
+
+export const IS_CONTRACT_DEPLOYED =
+  CONTRACT_ADDRESS !== "0x0000000000000000000000000000000000000000";
+
+// ─── Explorer URLs ────────────────────────────────────────────────────────────
+export const EXPLORER_BASE = IS_MAINNET
+  ? "https://chainscan.0g.ai"
+  : "https://chainscan-galileo.0g.ai";
+
+export const STORAGE_SCAN_BASE = IS_MAINNET
+  ? "https://storagescan.0g.ai"
+  : "https://storagescan-galileo.0g.ai";
+
+export function explorerTxUrl(hash: string): string {
+  return `${EXPLORER_BASE}/tx/${hash}`;
+}
+
+export function explorerAddressUrl(address: string): string {
+  return `${EXPLORER_BASE}/address/${address}`;
+}
 
 // ─── Storage Network Config ───────────────────────────────────────────────────
-export const OG_STORAGE_RPC = "https://rpc-storage-testnet.0g.ai";
-export const OG_STORAGE_INDEXER = "https://indexer-storage-testnet-standard.0g.ai";
+export const OG_STORAGE_RPC = IS_MAINNET
+  ? "https://evmrpc.0g.ai"
+  : "https://evmrpc-testnet.0g.ai";
+
+export const OG_STORAGE_INDEXER = IS_MAINNET
+  ? "https://indexer-storage-turbo.0g.ai"
+  : "https://indexer-storage-testnet-turbo.0g.ai";
+
+// ─── Policy Type Mapping ──────────────────────────────────────────────────────
+export const POLICY_TYPE_MAP: Record<number, string> = {
+  0: "flight_delay",
+  1: "gadget_warranty",
+  2: "event_cancellation",
+  3: "travel_medical",
+  4: "crypto_portfolio_shield",
+};
+
+export const POLICY_TYPE_REVERSE: Record<string, number> = {
+  flight_delay: 0,
+  gadget_warranty: 1,
+  event_cancellation: 2,
+  travel_medical: 3,
+  crypto_portfolio_shield: 4,
+};
+
+// ─── Claim Status Mapping ─────────────────────────────────────────────────────
+export const CLAIM_STATUS_MAP: Record<number, string> = {
+  0: "none",
+  1: "pending",
+  2: "approved",
+  3: "rejected",
+  4: "paid",
+};
 
 // ─── ABI ─────────────────────────────────────────────────────────────────────
 export const INSURANCE_ABI = [
@@ -205,6 +277,15 @@ export const INSURANCE_ABI = [
       { name: "payout", type: "uint256", indexed: false },
       { name: "teeSignature", type: "bytes", indexed: false },
       { name: "attestationHash", type: "bytes32", indexed: false },
+    ],
+  },
+  {
+    name: "ClaimRejected",
+    type: "event",
+    inputs: [
+      { name: "claimId", type: "uint256", indexed: true },
+      { name: "policyId", type: "uint256", indexed: true },
+      { name: "reason", type: "string", indexed: false },
     ],
   },
   {

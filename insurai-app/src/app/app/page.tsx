@@ -1,11 +1,14 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import PolicyList from "./components/PolicyList";
 import BuyPolicy from "./components/BuyPolicy";
 import SubmitClaim from "./components/SubmitClaim";
 import ClaimHistory from "./components/ClaimHistory";
 import styles from "./app.module.css";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { useAccount } from "wagmi";
 
 type Tab = "dashboard" | "buy" | "claim" | "history";
 
@@ -16,17 +19,29 @@ const NAV_ITEMS: { id: Tab; icon: string; label: string }[] = [
   { id: "history", icon: "📜", label: "Claim History" },
 ];
 
-import { ConnectButton } from "@rainbow-me/rainbowkit";
-import { useAccount } from "wagmi";
-
-export default function AppPage() {
+function AppContent() {
   const [activeTab, setActiveTab] = useState<Tab>("dashboard");
   const { address, isConnected } = useAccount();
+  const searchParams = useSearchParams();
+  const isDemoMode = searchParams.get("demo") === "true";
+
+  useEffect(() => {
+    if (isDemoMode) setActiveTab("dashboard");
+  }, [isDemoMode]);
 
   return (
     <div className="layout-sidebar">
+      {/* Demo Mode Banner */}
+      {isDemoMode && (
+        <div style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 1000, background: "linear-gradient(90deg, rgba(0,212,255,0.15), rgba(123,47,255,0.15))", borderBottom: "1px solid rgba(0,212,255,0.3)", padding: "10px 20px", textAlign: "center" }}>
+          <span style={{ fontSize: 13, fontWeight: 700, color: "var(--cyan)" }}>
+            🎭 Demo Mode — Using Pre-Seeded Data
+          </span>
+        </div>
+      )}
+
       {/* Sidebar */}
-      <aside className="sidebar">
+      <aside className="sidebar" style={isDemoMode ? { marginTop: 42 } : undefined}>
         <div className={styles.sidebarBrand}>
           <div className={styles.sidebarLogo}>⚡</div>
           <div>
@@ -40,9 +55,9 @@ export default function AppPage() {
         {/* Wallet */}
         <div className={styles.walletCard}>
           <div style={{ marginBottom: 16 }}>
-             <ConnectButton showBalance={false} accountStatus="address" chainStatus="icon" />
+            <ConnectButton showBalance={false} accountStatus="address" chainStatus="icon" />
           </div>
-          
+
           {isConnected && (
             <>
               <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10 }}>
@@ -98,12 +113,24 @@ export default function AppPage() {
       </aside>
 
       {/* Main */}
-      <main className="main-content">
+      <main className="main-content" style={isDemoMode ? { marginTop: 42 } : undefined}>
         {activeTab === "dashboard" && <PolicyList onBuyNew={() => setActiveTab("buy")} onSubmitClaim={() => setActiveTab("claim")} />}
         {activeTab === "buy" && <BuyPolicy onSuccess={() => setActiveTab("dashboard")} />}
         {activeTab === "claim" && <SubmitClaim onSuccess={() => setActiveTab("history")} />}
         {activeTab === "history" && <ClaimHistory />}
       </main>
     </div>
+  );
+}
+
+export default function AppPage() {
+  return (
+    <Suspense fallback={
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100vh", color: "var(--text-muted)" }}>
+        Loading...
+      </div>
+    }>
+      <AppContent />
+    </Suspense>
   );
 }

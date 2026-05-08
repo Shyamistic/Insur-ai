@@ -3,12 +3,16 @@ import "@rainbow-me/rainbowkit/styles.css";
 import { getDefaultConfig, RainbowKitProvider, darkTheme } from "@rainbow-me/rainbowkit";
 import { WagmiProvider } from "wagmi";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
-import { og_galileo } from "@/lib/contract";
+import { og_galileo, og_mainnet } from "@/lib/contract";
+
+const IS_MAINNET = process.env.NEXT_PUBLIC_IS_MAINNET === "true";
 
 const config = getDefaultConfig({
   appName: "InsurAI — Autonomous Insurance on 0G",
   projectId: process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID || "insurai_demo_project",
-  chains: [og_galileo as any],
+  chains: IS_MAINNET
+    ? [og_mainnet as never, og_galileo as never]
+    : [og_galileo as never, og_mainnet as never],
   ssr: true,
 });
 

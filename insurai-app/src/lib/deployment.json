@@ -1,0 +1,13 @@
+{
+  "contractAddress": "0xb3D949Ac25AABEbf628f8f8AD630214079cA8e95",
+  "teeSignerAddress": "0x74675Ae296385fa09213d2Bd45dACb3567804e0C",
+  "deployerAddress": "0x74675Ae296385fa09213d2Bd45dACb3567804e0C",
+  "network": "0g-galileo",
+  "chainId": 16602,
+  "rpcUrl": "https://evmrpc-testnet.0g.ai",
+  "explorerUrl": "https://chainscan-galileo.0g.ai/address/0xb3D949Ac25AABEbf628f8f8AD630214079cA8e95",
+  "deployTxHash": "0x512a4889304744d8d061939bd181456b8d70ebadcad7f22f448defab59c004f6",
+  "policyINFTAddress": "0xE06c6a8128fa0a90A1c8A9d2B0F442DD602ec79C",
+  "deployedAt": "2026-05-08T11:00:03.460Z",
+  "isMainnet": false
+}

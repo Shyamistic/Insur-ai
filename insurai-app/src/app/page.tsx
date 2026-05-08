@@ -89,6 +89,7 @@ export default function LandingPage() {
             <a href="#how-it-works">How it Works</a>
             <a href="#tech">Technology</a>
             <a href="#features">Features</a>
+            <Link href="/demo">Autonomous Demo</Link>
             <Link href="/chat">Chat</Link>
           </div>
           <div className={styles.navActions}>
@@ -120,8 +121,8 @@ export default function LandingPage() {
           </p>
 
           <div className={styles.heroActions}>
-            <Link href="/chat" className="btn btn-secondary btn-lg">
-              Chat Concierge
+            <Link href="/demo" className="btn btn-secondary btn-lg">
+              🤖 Autonomous Demo
             </Link>
             <Link href="/app" className="btn btn-primary btn-lg">
               <span>Buy Insurance Now</span>
